@@ -53,7 +53,7 @@ class Snake:
          #hver gang du rykker så vokser sulten med 1
         self.hunger += 1
         #når den når 15 kalder vi starve
-        if self.hunger == 20:
+        if self.hunger == 15:
             self.starve()
 
         self.coordinates =[(headx,heady)] + self.coordinates
@@ -80,7 +80,7 @@ class Level:
         return self.food_location
     
 class Engine:
-    def __init__(self, display_type, level=None, snake=None,):
+    def __init__(self, display_type, difficulties, level=None, snake=None,):
         if level: 
             self.level = level
         else:
@@ -92,11 +92,23 @@ class Engine:
         self.display_type = display_type
         self.turns = 0
         self.score = 0
+
+        self.difficulties = {
+            1000: 0.8,
+            7500: 0.6,
+            15000: 0.45,
+            25000: 0.3,
+            50000: 0.1,
+            100000: 0.05
+            1000000: 0.01
+        }
         #vi placerer maden, men kun i de felter som er fri.       
         self.level.place_food(blocked_coordinates=self.snake.coordinates)
         self.update_screen()
     def run_game(self):
         while True:
+
+
             
             print(f"Position: {self.snake.coordinates}") 
             print(f"Food: {self.level.food_location}")
