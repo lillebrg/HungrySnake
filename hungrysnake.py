@@ -79,7 +79,6 @@ class Level:
         self.food_location = (foodx, foody)
         return self.food_location
     
-
 class Engine:
     def __init__(self, display_type, level=None, snake=None,):
         if level: 
@@ -91,20 +90,20 @@ class Engine:
         else:
             self.snake = Snake()
         self.display_type = display_type
+        self.turns = 0
+        self.score = 0
         #vi placerer maden, men kun i de felter som er fri.       
         self.level.place_food(blocked_coordinates=self.snake.coordinates)
         self.update_screen()
     def run_game(self):
         while True:
             
-            print("placering")
-            print(self.snake.coordinates)
-            print("mad:")
-            print(self.level.food_location)
-            print("hunger:")
-            print(self.snake.hunger)
+            print(f"Position: {self.snake.coordinates}") 
+            print(f"Food: {self.level.food_location}")
+            print(f"Hunger: {self.snake.hunger}")
+            print(f"turns: {self.turns}")
+            print(f"score: {self.score}")
             
-           
             direction = input("hvilken vej?")
             #her har vi gjordt at man i stedet for at skrive up down osv. at man nu kan skrive 'wasd'
             if direction == "w":
@@ -144,6 +143,10 @@ class Engine:
                 self.snake.eat()
                 self.level.place_food(blocked_coordinates=self.snake.coordinates)
                 print("nomnomnom")
+            self.turns +=1
+            self.score = self.turns * len(self.snake.coordinates)
+
+            
             self.update_screen()
                 
 
@@ -185,8 +188,6 @@ class Engine:
                     #her printer vi alle punkterne i x linjen et af gangen
                     print(chars[self.frame[x][y]], end="")
                 print()
-
-
 
 
 if __name__ == '__main__':
