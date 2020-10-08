@@ -80,7 +80,7 @@ class Level:
         return self.food_location
     
 class Engine:
-    def __init__(self, display_type, difficulties, level=None, snake=None,):
+    def __init__(self, display_type, difficulties=None, level=None, snake=None,):
         if level: 
             self.level = level
         else:
@@ -89,18 +89,28 @@ class Engine:
             self.snake = snake
         else:
             self.snake = Snake()
+        if difficulties:
+            self.difficulties
+        else:
+            self.difficulties = {            
+            1000 : 0.8,
+            7500 : 0.6,
+            15000 : 0.45,
+            25000 : 0.3,
+            50000 : 0.1,
+            100000 : 0.05}
         self.display_type = display_type
         self.turns = 0
         self.score = 0
+        self.difficulties = difficulties
 
         self.difficulties = {
-            1000: 0.8,
-            7500: 0.6,
-            15000: 0.45,
-            25000: 0.3,
-            50000: 0.1,
-            100000: 0.05
-            1000000: 0.01
+            1000 : 0.8,
+            7500 : 0.6,
+            15000 : 0.45,
+            25000 : 0.3,
+            50000 : 0.1,
+            100000 : 0.05
         }
         #vi placerer maden, men kun i de felter som er fri.       
         self.level.place_food(blocked_coordinates=self.snake.coordinates)
@@ -108,15 +118,21 @@ class Engine:
     def run_game(self):
         while True:
 
-
-            
+            print()
             print(f"Position: {self.snake.coordinates}") 
+            print()
             print(f"Food: {self.level.food_location}")
+            print()
             print(f"Hunger: {self.snake.hunger}")
+            print()
+            print(f"snake length: {len (self.snake.coordinates)}")
             print(f"turns: {self.turns}")
+            print()
+            print("snake length * turns = score")
             print(f"score: {self.score}")
+            print()
             
-            direction = input("hvilken vej?")
+            direction = input("which way?")
             #her har vi gjordt at man i stedet for at skrive up down osv. at man nu kan skrive 'wasd'
             if direction == "w":
                 direction = "up"
