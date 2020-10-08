@@ -32,7 +32,7 @@ class Snake:
             return
         if new_direction not in ["up", "down", "left", "right"]:
             if new_direction:
-                print("du kan kun skrive up, down, left ,right for at gå i forskellige retninger")
+                print("du kan skrive up, down, left ,right eller 'wasd' for at gå i forskellige retninger")
             return
         self.direction = new_direction
 
@@ -69,8 +69,8 @@ class Level:
         self.height = height
         self.delay = delay
     def place_food(self, blocked_coordinates=[]):
-        foodx = random.randint(0,self.length)
-        foody = random.randint(0,self.height)
+        foodx = random.randint(0,self.length - 1)
+        foody = random.randint(0,self.height - 1)
         if (foodx, foody) in blocked_coordinates:
             foodx, foody = self.place_food(blocked_coordinates = blocked_coordinates)
         self.food_location = (foodx, foody)
@@ -101,8 +101,18 @@ class Engine:
             print("hunger:")
             print(self.snake.hunger)
             
-            
+           
             direction = input("hvilken vej?")
+            #her har vi gjordt at man i stedet for at skrive up down osv. at man nu kan skrive 'wasd'
+            if direction == "w":
+                direction = "up"
+            elif direction == "s":
+                direction = "down"
+            elif direction == "a":
+                direction = "left"
+            elif direction == "d":
+                direction = "right"
+
             if direction != "":
                 #hvis noget blev intastet, kald turn funktion.
                 self.snake.turn(new_direction = direction)
@@ -133,25 +143,33 @@ class Engine:
                 print("nomnomnom")
             self.update_screen()
                 
-                
-            print(direction)
-            print("placering")
-            print(self.snake.coordinates)
-            print("mad:")
-            print(self.level.food_location)
-            print("hunger:")
-            print(self.snake.hunger)
 
     def update_screen(self):
+        #vi opretter en frame fyldt med blank, som tegner vores bane op
         self.frame=[]
         for x in range(self.level.length):
             self.frame.append(["blank"] * self.level.height)
+
+        chars = {"blank" : ".", "body" : "o", "head" : "O", "food" : "*"}
+
+        #her siger vi at x,y er slangens hoved
+        x,y = self.snake.coordinates[0]
+        #og her tegner vi hovedet med hjælp fra teksten over
+        self.frame[x][y] = "head"
+
+        #vi laver kroppen til slangen
+        for x,y in self.snake.coordinates[1:]:
+            #her tenger vi resten af kroppen på banen
+            self.frame[x][y] = "body"
+
+        x,y = self.level.food_location
+        self.frame[x][y] = "food"
 
         if self.display_type == "pc":
             #skærmen tømmes
             os.system("cls")
             #vi laver en ordbog så vi nemt kan tegne de forskellige tegn.
-            chars = {"blank" : ".", "body" : "o", "head" : "O", "food" : "*"}
+
             #her tager vi alle y'erne i reverese så vi for det ordenligt sat op.
             for y in reversed(range (self.level.height)):
                 #her tager vi x'erne uden reverse for den skal i den normale retning.
@@ -159,6 +177,7 @@ class Engine:
                     #her printer vi alle punkterne i x linjen et af gangen
                     print(chars[self.frame[x][y]], end="")
                 print()
+
 
 
 
