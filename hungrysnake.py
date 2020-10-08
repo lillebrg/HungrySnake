@@ -1,6 +1,9 @@
+# coding: utf8
+
 import random
 import sys
 import os
+import platform
 
 class Snake:
     def __init__(self, coordinates=[(6,5),(5,5),(4,5)],direction="right", hunger=0):
@@ -167,7 +170,12 @@ class Engine:
 
         if self.display_type == "pc":
             #skærmen tømmes
-            os.system("cls")
+            if platform.system() == "Windows":
+                # brug "cls" på Windows
+                os.system("cls")
+            else:
+                # brug "clear" på ikke-Windows
+                os.system("clear")
             #vi laver en ordbog så vi nemt kan tegne de forskellige tegn.
 
             #her tager vi alle y'erne i reverese så vi for det ordenligt sat op.
